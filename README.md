@@ -1,4 +1,4 @@
-```markdown
+
 # Product Manager
 
 Este proyecto implementa una clase en JavaScript llamada "ProductManager" que gestiona un conjunto de productos.
@@ -42,4 +42,3 @@ Este proyecto implementa una clase en JavaScript llamada "ProductManager" que ge
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
-```
