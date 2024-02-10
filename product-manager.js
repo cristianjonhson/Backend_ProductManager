@@ -4,16 +4,16 @@ class ProductManager {
     this.autoIncrementId = 1;
   }
 
-  // Método para agregar un producto al arreglo
+// Método para agregar un producto al arreglo
   addProduct({ title, description, price, thumbnail, code, stock }) {
     // Validar campos obligatorios
-    if (!this.areAllFieldsPresent({ title, description, price, thumbnail, code, stock })) {
+    if (!(title && description && price && thumbnail && code && stock)) {
       console.error('Todos los campos son obligatorios');
       return;
     }
 
     // Validar código único
-    if (this.isCodeDuplicate(code)) {
+    if (this.products.some(product => product.code === code)) {
       console.error('El código ya existe. No se permiten códigos duplicados.');
       return;
     }
@@ -34,22 +34,10 @@ class ProductManager {
     console.log(`Producto agregado: ${newProduct.title}`);
   }
 
-  // Verificar si todos los campos requeridos están presentes
-  areAllFieldsPresent({ title, description, price, thumbnail, code, stock }) {
-    return title && description && price && thumbnail && code && stock;
-  }
-
-  // Verificar si el código ya existe en productos existentes
-  isCodeDuplicate(code) {
-    return this.products.some(product => product.code === code);
-  }
-
-  // Obtener la lista completa de productos
   getProducts() {
     return this.products;
   }
 
-  // Buscar un producto por su ID
   getProductById(id) {
     const product = this.products.find(product => product.id === id);
 
@@ -79,7 +67,7 @@ const product2 = {
   price: 30.49,
   thumbnail: 'imagen2.jpg',
   code: 'P002',
-  stock: 30,
+  stock: 30,  
 };
 
 productManager.addProduct(product1);
