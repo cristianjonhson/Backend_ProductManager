@@ -42,7 +42,11 @@ class UserManager {
   
 
   async writeUsersFile(users) {
-    await fs.writeFile(this.path, JSON.stringify(users, null, 2), 'utf-8');
+    try {
+      await fs.writeFile(this.path, JSON.stringify(users, null, 2), 'utf-8');
+    } catch (error) {
+      throw new Error(`Error al escribir en el archivo de usuarios: ${error.message}`);
+    }
   }
 }
 
