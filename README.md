@@ -10,6 +10,8 @@ Este proyecto implementa una clase en JavaScript llamada "ProductManager" que ge
 - Asignación de un ID autoincrementable a cada producto agregado.
 - Obtener la lista completa de productos.
 - Buscar un producto por su ID.
+- Actualizar un producto por su ID.
+- Eliminar un producto por su ID.
 
 ## Uso
 
