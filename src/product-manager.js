@@ -120,8 +120,8 @@ class ProductManager {
 // Ejemplo de uso
 (async () => {
 // Crear instancia de ProductManager y cargar datos desde el archivo
-  const productManager = new ProductManager('productos.json');
-
+  const productManager = new ProductManager('src/productos.json');
+      
 // Ejemplo de productos
   const product1 = {
     title: 'Producto 1',
