@@ -1,4 +1,3 @@
-
 # Product Manager
 
 Este proyecto implementa una clase en JavaScript llamada "ProductManager" que gestiona un conjunto de productos.
@@ -13,7 +12,9 @@ Este proyecto implementa una clase en JavaScript llamada "ProductManager" que ge
 - Actualizar un producto por su ID.
 - Eliminar un producto por su ID.
 
-## Uso
+## Uso con Express
+
+Este proyecto ahora incluye una implementación básica de un servidor Express para interactuar con la clase `ProductManager`.
 
 1. Instalar Node.js en tu sistema si aún no lo tienes instalado.
 
@@ -29,13 +30,24 @@ Este proyecto implementa una clase en JavaScript llamada "ProductManager" que ge
    cd product-manager
    ```
 
-4. Ejecutar el archivo principal con Node.js:
+4. Instalar las dependencias:
 
    ```bash
-   node product-manager.js
+   npm install
    ```
 
-   Esto mostrará ejemplos de cómo usar la clase `ProductManager`.
+5. Ejecutar el servidor con Nodemon (para reiniciar automáticamente cuando se realicen cambios):
+
+   ```bash
+   npm run dev
+   ```
+
+6. Acceder a través de tu navegador a las siguientes URLs:
+
+   - [http://localhost:8080/products](http://localhost:8080/products) - Obtener todos los productos.
+   - [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5) - Obtener los primeros 5 productos.
+   - [http://localhost:8080/products/2](http://localhost:8080/products/2) - Obtener el producto con ID=2.
+   - [http://localhost:8080/products/34123123](http://localhost:8080/products/34123123) - Obtener un error indicando que el producto no existe.
 
 ## Contribuciones
 
