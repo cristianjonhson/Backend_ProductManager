@@ -1,0 +1,17 @@
+{
+    "name": "product-manager-express",
+    "version": "1.0.0",
+    "description": "Product Manager with Express & nodemon",
+    "main": "src/app.js",
+    "scripts": {
+      "start": "node src/app.js",
+      "dev": "nodemon src/app.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.3"
+    }
+  }
+  
