@@ -11,11 +11,13 @@ class ProductManager {
   // Inicializa la instancia de ProductManager
   initialize() {
     try {
-      this.products = this.readFromFile();
+      const fileData = this.readFromFile();
+      this.products = Array.isArray(fileData) ? fileData : [];
     } catch (error) {
       console.error(`Error al inicializar ProductManager: ${error.message}`);
     }
   }
+  
 
   // Calcula el próximo ID disponible de forma eficiente
   calculateNextId() {
@@ -103,9 +105,14 @@ class ProductManager {
 
   // Lee el archivo y retorna los productos
   async readFromFile() {
-    const data = await fs.readFile(this.path, 'utf-8');
-    return JSON.parse(data) || [];
-  }
+    try {
+      const data = await fs.readFile(this.path, 'utf-8');
+      return JSON.parse(data) || [];
+    } catch (error) {
+      console.error(`Error al leer desde el archivo: ${error.message}`);
+      return [];
+    }
+  }  
 
   // Guarda la lista de productos en el archivo
   async saveToFile() {
@@ -145,19 +152,6 @@ class ProductManager {
   productManager.addProduct(product1);
   productManager.addProduct(product2);
 
-console.log('Todos los productos:', productManager.getProducts());
-
- // ID del producto que se actualizará
-  const productIdToUpdate = 2;
-// Campos actualizados para el producto con el ID especificado
-  const updatedFields = { stock: 40, price: 35.99 };
-// Llama al método updateProduct para actualizar el producto con el ID y los campos especificados
-  productManager.updateProduct(productIdToUpdate, updatedFields);
-
-// ID del producto que se eliminará
-  const productIdToDelete = 1;
-// Llama al método deleteProduct para eliminar el producto con el ID especificado
-  productManager.deleteProduct(productIdToDelete);
-
-  console.log('Productos actualizados:', productManager.getProducts());
 })();
+
+module.exports = ProductManager;
