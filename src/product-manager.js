@@ -11,21 +11,25 @@ class ProductManager {
   // Inicializa la instancia de ProductManager
   async initialize() {
     try {
-      // Verifica si el archivo existe antes de intentar leerlo
-      const fileExists = await this.checkFileExists();
-      
-      if (!fileExists) {
-        // Si el archivo no existe, crea un archivo vacío con un array
-        await fs.writeFile(this.path, '[]', 'utf-8');
-      }
+      // Verifica si los productos ya están cargados en memoria
+      if (this.products.length === 0) {
+        // Verifica si el archivo existe antes de intentar leerlo
+        const fileExists = await this.checkFileExists();
+        
+        if (!fileExists) {
+          // Si el archivo no existe, crea un archivo vacío con un array
+          await fs.writeFile(this.path, '[]', 'utf-8');
+        }
 
-      // Lee los datos del archivo
-      const fileData = await this.readFromFile();
-      this.products = Array.isArray(fileData) ? fileData : [];
+        // Lee los datos del archivo solo la primera vez
+        const fileData = await this.readFromFile();
+        this.products = Array.isArray(fileData) ? fileData : [];
+      }
     } catch (error) {
       console.error(`Error al inicializar ProductManager: ${error.message}`);
     }
-  }
+}
+  
 
   // Verifica si el archivo existe
   async checkFileExists() {
