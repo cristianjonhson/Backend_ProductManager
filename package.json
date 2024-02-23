@@ -15,8 +15,8 @@
     "nodemon": "^3.0.3"
   },
   "nodemonConfig": {
-    "ignore": ["src/**/*.test.js", "node_modules"],
+    "ignore": ["src/app.js", "src/**/*.test.js", "node_modules"],
     "watch": ["src"],
     "exec": "npm start"
-  }
+  }  
 }
