@@ -24,10 +24,14 @@ app.get('/products', async (req, res) => {
       result = products;
     }
 
-    res.json(result);
+    if (result.length > 0) {
+      res.status(200).json(result); // 200 OK: Respondiendo con productos (éxito)
+    } else {
+      res.status(404).json({ error: 'No se encontraron productos' }); // 404 Not Found: No se encontraron productos
+    }
   } catch (error) {
-    console.error('Error reading products data:', error); // log the entire error object
-    res.status(500).json({ error: 'Error reading products data' });
+    console.error('Error reading products data:', error.message);
+    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
   }
 });
 
@@ -42,13 +46,13 @@ app.get('/products/:id', async (req, res) => {
     const product = products.find(product => product.id === productId);
 
     if (product) {
-      res.json(product);
+      res.status(200).json(product); // 200 OK: Respondiendo con el producto (éxito)
     } else {
-      res.status(404).json({ error: 'Producto no encontrado' });
+      res.status(404).json({ error: 'Producto no encontrado' }); // 404 Not Found: Producto no encontrado
     }
   } catch (error) {
     console.error('Error reading products data:', error.message);
-    res.status(500).json({ error: 'Error reading products data' });
+    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
   }
 });
 
