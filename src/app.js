@@ -1,51 +1,58 @@
 const express = require('express');
+const fs = require('fs').promises;
+const path = require('path');
 const app = express();
 const port = 8080;
-
-// Rutas de ejemplo
-const products = [
-  { id: 1, name: 'Product 1', price: 19.99 },
-  { id: 2, name: 'Product 2', price: 29.99 },
-  { id: 3, name: 'Product 3', price: 39.99 },
-  { id: 4, name: 'Product 4', price: 49.99 },
-  { id: 5, name: 'Product 5', price: 59.99 },
-  { id: 6, name: 'Product 6', price: 69.99 },
-  { id: 7, name: 'Product 7', price: 79.99 },
-  { id: 8, name: 'Product 8', price: 89.99 },
-  { id: 9, name: 'Product 9', price: 99.99 },
-  { id: 10, name: 'Product 10', price: 109.99 },
-];
 
 // Middleware para parsear JSON
 app.use(express.json());
 
 // Ruta para obtener todos los productos o limitar la cantidad
 // Middleware para procesar la consulta y devolver los productos
-app.get('/products', (req, res) => {
-  const limit = req.query.limit; // Obtén el parámetro de límite desde la consulta
-  let result;
+app.get('/products', async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'products.json');
+    const data = await fs.readFile(filePath, 'utf-8');
+    const products = JSON.parse(data);
 
-  if (limit) {
-    // Si se proporciona el parámetro de límite, devuelve solo los primeros productos
-    result = products.slice(0, limit);
-  } else {
-    // Si no se proporciona el parámetro de límite, devuelve todos los productos
-    result = products;
+    const limit = req.query.limit;
+    let result;
+
+    if (limit) {
+      result = products.slice(0, limit);
+    } else {
+      result = products;
+    }
+
+    if (result.length > 0) {
+      res.status(200).json(result); // 200 OK: Respondiendo con productos (éxito)
+    } else {
+      res.status(404).json({ error: 'No se encontraron productos' }); // 404 Not Found: No se encontraron productos
+    }
+  } catch (error) {
+    console.error('Error reading products data:', error.message);
+    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
   }
-
-  res.json(result);
 });
 
 // Ruta para obtener un producto por ID
-app.get('/products/:id', (req, res) => {
-  const productId = parseInt(req.params.id);
-  const product = products.find(product => product.id === productId);
+app.get('/products/:id', async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'products.json');
+    const data = await fs.readFile(filePath, 'utf-8');
+    const products = JSON.parse(data);
 
-  if (product) {
-    res.json(product);
-  } else {
-    // Si no se encuentra el producto, devuelve un objeto de error
-    res.status(404).json({ error: 'Producto no encontrado' });
+    const productId = parseInt(req.params.id);
+    const product = products.find(product => product.id === productId);
+
+    if (product) {
+      res.status(200).json(product); // 200 OK: Respondiendo con el producto (éxito)
+    } else {
+      res.status(404).json({ error: 'Producto no encontrado' }); // 404 Not Found: Producto no encontrado
+    }
+  } catch (error) {
+    console.error('Error reading products data:', error.message);
+    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
   }
 });
 
