@@ -12,6 +12,12 @@ app.use(express.json());
 app.get('/products', async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'products.json');
+    const fileExists = await checkFileExists(filePath);
+
+    if (!fileExists) {
+      return res.status(404).json({ error: 'No se encontraron productos' });
+    }
+
     const data = await fs.readFile(filePath, 'utf-8');
     const products = JSON.parse(data);
 
@@ -31,7 +37,7 @@ app.get('/products', async (req, res) => {
     }
   } catch (error) {
     console.error('Error reading products data:', error.message);
-    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -39,6 +45,12 @@ app.get('/products', async (req, res) => {
 app.get('/products/:id', async (req, res) => {
   try {
     const filePath = path.join(__dirname, 'products.json');
+    const fileExists = await checkFileExists(filePath);
+
+    if (!fileExists) {
+      return res.status(404).json({ error: 'No se encontraron productos' });
+    }
+
     const data = await fs.readFile(filePath, 'utf-8');
     const products = JSON.parse(data);
 
@@ -52,9 +64,19 @@ app.get('/products/:id', async (req, res) => {
     }
   } catch (error) {
     console.error('Error reading products data:', error.message);
-    res.status(500).json({ error: 'Error reading products data' }); // 500 Internal Server Error: Error interno del servidor
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+// Función para verificar si un archivo existe
+async function checkFileExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 // Inicia el servidor
 app.listen(port, () => {
