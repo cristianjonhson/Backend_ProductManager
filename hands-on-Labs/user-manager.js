@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const path = require('path');
 
 class UserManager {
   constructor(path) {
@@ -6,26 +7,21 @@ class UserManager {
   }
 
   async createUser(user) {
-    try {
-      const users = await this.readUsersFile();
-      user.id = users.length + 1;
-      users.push(user);
-      await this.writeUsersFile(users);
-      console.log('Usuario creado con éxito:', user);
-    } catch (error) {
-      console.error('Error al crear usuario:', error.message);
-    }
+    const users = await this.readUsersFile();
+    const newUser = {
+      id: users.length + 1,
+      ...user,
+    };
+
+    users.push(newUser);
+    await this.writeUsersFile(users);
+
+    return newUser;
   }
 
   async consultUsers() {
-    try {
-      const users = await this.readUsersFile();
-      console.log('Usuarios consultados:', users);
-      return users;
-    } catch (error) {
-      console.error('Error al consultar usuarios:', error.message);
-      return [];
-    }
+    const users = await this.readUsersFile();
+    return users;
   }
 
   async readUsersFile() {
@@ -36,13 +32,19 @@ class UserManager {
       }
       return JSON.parse(data) || [];
     } catch (error) {
+      if (error.code === 'ENOENT') {
+        await this.writeUsersFile([]);
+        return [];
+      }
+
       throw new Error(`Error al leer el archivo de usuarios: ${error.message}`);
     }
   }
-  
+
 
   async writeUsersFile(users) {
     try {
+      await fs.mkdir(path.dirname(this.path), { recursive: true });
       await fs.writeFile(this.path, JSON.stringify(users, null, 2), 'utf-8');
     } catch (error) {
       throw new Error(`Error al escribir en el archivo de usuarios: ${error.message}`);
