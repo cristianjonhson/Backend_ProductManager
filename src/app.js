@@ -1,12 +1,28 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const UserManager = require('../hands-on-Labs/user-manager');
 const app = express();
 const port = 8080;
 const PRODUCTS_FILE_PATH = path.resolve(__dirname, '../products.json');
+const USERS_FILE_PATH = path.resolve(__dirname, '../hands-on-Labs/Usuarios.json');
+const userManager = new UserManager(USERS_FILE_PATH);
 
 // Middleware para parsear JSON
 app.use(express.json());
+
+// CORS para desarrollo local (frontend en otro puerto/origen)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  return next();
+});
 
 // Lee y normaliza el archivo de productos desde una unica ruta.
 async function readProducts() {
@@ -80,6 +96,42 @@ app.get('/products/:id', async (req, res) => {
   } catch (error) {
     console.error('Error reading products data:', error.message);
     res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Ruta para consultar los usuarios del hands-on lab
+app.get('/labs/users', async (req, res) => {
+  try {
+    const users = await userManager.consultUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error reading users data:', error.message);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Ruta para crear un usuario del hands-on lab
+app.post('/labs/users', async (req, res) => {
+  try {
+    const { Nombre, Apellido, Edad, Curso } = req.body;
+
+    if (!Nombre || !Apellido || Edad === undefined || !Curso) {
+      return res.status(400).json({
+        error: 'Los campos Nombre, Apellido, Edad y Curso son obligatorios',
+      });
+    }
+
+    const createdUser = await userManager.createUser({
+      Nombre,
+      Apellido,
+      Edad,
+      Curso,
+    });
+
+    return res.status(201).json(createdUser);
+  } catch (error) {
+    console.error('Error creating user:', error.message);
+    return res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
