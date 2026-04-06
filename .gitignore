@@ -39,5 +39,6 @@ coverage/
 .vscode/
 
 # Archivos de lock alternativos (el proyecto usa pnpm-lock.yaml)
+pnpm-lock.yaml
 package-lock.json
 yarn.lock
