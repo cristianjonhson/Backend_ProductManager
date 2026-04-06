@@ -119,12 +119,12 @@ curl http://localhost:8080/products/2
 ## Configuración y Notas Importantes
 
 - Puerto actual: `8080` (definido en `src/app.js`).
-- El servidor de productos lee actualmente desde `src/products.json`.
-- En este repositorio también existe `products.json` en la raíz.
+- Ubicación única de datos de productos: `products.json` en la raíz del proyecto.
+- La API soporta dos formatos válidos en `products.json`: un arreglo directo `[]` o un objeto con la propiedad `products`.
 
-Si al consultar `/products` recibes un 404 por falta de archivo, asegúrate de tener un archivo `products.json` dentro de la carpeta `src` o ajusta la ruta en el código.
+Si al consultar `/products` recibes un 404 por falta de archivo, asegúrate de que exista `products.json` en la raíz del repositorio.
 
-Contenido mínimo sugerido para `src/products.json`:
+Contenido mínimo sugerido para `products.json`:
 
 ```json
 []
@@ -152,13 +152,12 @@ pnpm add -D <paquete-dev>
 - Error: `pnpm: command not found`
   - Instala PNPM globalmente o habilítalo con Corepack.
 - Error al leer productos
-  - Verifica que exista `src/products.json` con JSON válido.
+  - Verifica que exista `products.json` en la raíz con JSON válido.
 - Puerto en uso
   - Cambia el puerto en `src/app.js` o libera el puerto 8080.
 
 ## Próximas Mejoras Sugeridas
 
-- Unificar la ubicación del archivo de productos (raíz vs `src`).
 - Mover el puerto a variables de entorno (`.env`).
 - Agregar validaciones más estrictas para `limit` e `id`.
 - Incorporar tests para endpoints y gestores de archivos.
