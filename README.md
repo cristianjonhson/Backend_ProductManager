@@ -1,58 +1,164 @@
-# Product Manager
+# Backend Product Manager
 
-Este proyecto implementa una clase en JavaScript llamada "ProductManager" que gestiona un conjunto de productos.
+API simple en Node.js + Express para consultar productos desde un archivo JSON, junto con ejercicios de laboratorio orientados al manejo de usuarios y persistencia en archivos.
 
-## Funcionalidades
+## Descripción del Proyecto
 
-- Agregar productos con campos obligatorios como título, descripción, precio, ruta de imagen, código y stock.
-- Validación para asegurar que el código de producto sea único.
-- Asignación de un ID autoincrementable a cada producto agregado.
-- Obtener la lista completa de productos.
-- Buscar un producto por su ID.
-- Actualizar un producto por su ID.
-- Eliminar un producto por su ID.
+Este repositorio contiene:
 
-## Uso con Express
+- Un servidor Express con endpoints para listar productos y consultar un producto por ID.
+- Un módulo de gestión de productos (`ProductManager`) con operaciones CRUD sobre archivos.
+- Un conjunto de laboratorios en la carpeta `hands-on-Labs` para practicar manejo de usuarios con persistencia en JSON.
 
-Este proyecto ahora incluye una implementación básica de un servidor Express para interactuar con la clase `ProductManager`.
+Es un proyecto ideal para practicar fundamentos backend: rutas HTTP, manejo de archivos con `fs/promises`, validaciones básicas y estructura modular en JavaScript.
 
-1. Instalar Node.js en tu sistema si aún no lo tienes instalado.
+## Tecnologías
 
-2. Clonar el repositorio:
+- Node.js
+- Express 4
+- Nodemon (desarrollo)
+- PNPM (gestor de paquetes)
 
-   ```bash
-   git clone <URL_DEL_REPOSITORIO>
-   ```
+## Requisitos
 
-3. Navegar al directorio del proyecto:
+- Node.js 18 o superior (recomendado)
+- PNPM 10 o superior
 
-   ```bash
-   cd product-manager
-   ```
+Verifica versiones instaladas:
 
-4. Instalar las dependencias:
+```bash
+node -v
+pnpm -v
+```
 
-   ```bash
-   npm install
-   ```
+## Instalación
 
-5. Ejecutar el servidor con Nodemon (para reiniciar automáticamente cuando se realicen cambios):
+1. Clona el repositorio.
+2. Entra a la carpeta del proyecto.
+3. Instala dependencias con PNPM:
 
-   ```bash
-   npm run dev
-   ```
+```bash
+pnpm install
+```
 
-6. Acceder a través de tu navegador a las siguientes URLs:
+## Ejecución
 
-   - [http://localhost:8080/products](http://localhost:8080/products) - Obtener todos los productos.
-   - [http://localhost:8080/products?limit=5](http://localhost:8080/products?limit=5) - Obtener los primeros 5 productos.
-   - [http://localhost:8080/products/2](http://localhost:8080/products/2) - Obtener el producto con ID=2.
-   - [http://localhost:8080/products/34123123](http://localhost:8080/products/34123123) - Obtener un error indicando que el producto no existe.
+### Modo desarrollo
 
-## Contribuciones
+```bash
+pnpm dev
+```
 
-¡Las contribuciones son bienvenidas! Si encuentras algún problema o tienes sugerencias, por favor crea un "issue" en este repositorio.
+### Modo producción/local
 
-## Licencia
+```bash
+pnpm start
+```
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
+El servidor inicia por defecto en:
+
+```text
+http://localhost:8080
+```
+
+## Scripts Disponibles
+
+- `pnpm start`: ejecuta `src/app.js` con Node.
+- `pnpm dev`: ejecuta el proyecto con Nodemon.
+
+## Endpoints de la API
+
+Base URL: `http://localhost:8080`
+
+### GET /products
+
+Devuelve todos los productos.
+
+Ejemplo:
+
+```bash
+curl http://localhost:8080/products
+```
+
+### GET /products?limit=5
+
+Devuelve una cantidad limitada de productos (desde el inicio del arreglo).
+
+Ejemplo:
+
+```bash
+curl "http://localhost:8080/products?limit=5"
+```
+
+### GET /products/:id
+
+Devuelve un producto por ID.
+
+Ejemplo:
+
+```bash
+curl http://localhost:8080/products/2
+```
+
+## Estructura del Proyecto
+
+```text
+.
+├─ src/
+│  ├─ app.js                # Servidor Express y rutas /products
+│  └─ product-manager.js    # Clase ProductManager (CRUD en archivo)
+├─ hands-on-Labs/
+│  ├─ new-user.js           # Script de ejemplo para crear/consultar usuarios
+│  ├─ user-manager.js       # Clase UserManager
+│  └─ Usuarios.json         # Datos de usuarios para laboratorios
+├─ products.json            # Archivo de productos en la raíz del proyecto
+├─ package.json
+└─ README.md
+```
+
+## Configuración y Notas Importantes
+
+- Puerto actual: `8080` (definido en `src/app.js`).
+- El servidor de productos lee actualmente desde `src/products.json`.
+- En este repositorio también existe `products.json` en la raíz.
+
+Si al consultar `/products` recibes un 404 por falta de archivo, asegúrate de tener un archivo `products.json` dentro de la carpeta `src` o ajusta la ruta en el código.
+
+Contenido mínimo sugerido para `src/products.json`:
+
+```json
+[]
+```
+
+## Uso de PNPM
+
+Comandos principales:
+
+```bash
+pnpm install
+pnpm dev
+pnpm start
+```
+
+Opcionalmente, para agregar dependencias:
+
+```bash
+pnpm add <paquete>
+pnpm add -D <paquete-dev>
+```
+
+## Troubleshooting Rápido
+
+- Error: `pnpm: command not found`
+  - Instala PNPM globalmente o habilítalo con Corepack.
+- Error al leer productos
+  - Verifica que exista `src/products.json` con JSON válido.
+- Puerto en uso
+  - Cambia el puerto en `src/app.js` o libera el puerto 8080.
+
+## Próximas Mejoras Sugeridas
+
+- Unificar la ubicación del archivo de productos (raíz vs `src`).
+- Mover el puerto a variables de entorno (`.env`).
+- Agregar validaciones más estrictas para `limit` e `id`.
+- Incorporar tests para endpoints y gestores de archivos.
