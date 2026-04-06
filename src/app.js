@@ -3,23 +3,42 @@ const fs = require('fs').promises;
 const path = require('path');
 const app = express();
 const port = 8080;
+const PRODUCTS_FILE_PATH = path.resolve(__dirname, '../products.json');
 
 // Middleware para parsear JSON
 app.use(express.json());
+
+// Lee y normaliza el archivo de productos desde una unica ruta.
+async function readProducts() {
+  const fileExists = await checkFileExists(PRODUCTS_FILE_PATH);
+
+  if (!fileExists) {
+    return null;
+  }
+
+  const data = await fs.readFile(PRODUCTS_FILE_PATH, 'utf-8');
+  const parsedData = JSON.parse(data);
+
+  if (Array.isArray(parsedData)) {
+    return parsedData;
+  }
+
+  if (Array.isArray(parsedData.products)) {
+    return parsedData.products;
+  }
+
+  throw new Error('Formato de products.json invalido');
+}
 
 // Ruta para obtener todos los productos o limitar la cantidad
 // Middleware para procesar la consulta y devolver los productos
 app.get('/products', async (req, res) => {
   try {
-    const filePath = path.join(__dirname, 'products.json');
-    const fileExists = await checkFileExists(filePath);
+    const products = await readProducts();
 
-    if (!fileExists) {
+    if (!products) {
       return res.status(404).json({ error: 'No se encontraron productos' });
     }
-
-    const data = await fs.readFile(filePath, 'utf-8');
-    const products = JSON.parse(data);
 
     const limit = req.query.limit;
     let result;
@@ -44,15 +63,11 @@ app.get('/products', async (req, res) => {
 // Ruta para obtener un producto por ID
 app.get('/products/:id', async (req, res) => {
   try {
-    const filePath = path.join(__dirname, 'products.json');
-    const fileExists = await checkFileExists(filePath);
+    const products = await readProducts();
 
-    if (!fileExists) {
+    if (!products) {
       return res.status(404).json({ error: 'No se encontraron productos' });
     }
-
-    const data = await fs.readFile(filePath, 'utf-8');
-    const products = JSON.parse(data);
 
     const productId = parseInt(req.params.id);
     const product = products.find(product => product.id === productId);
