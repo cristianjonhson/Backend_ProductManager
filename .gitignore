@@ -1,9 +1,15 @@
-# Node.js
+# Dependencias
 node_modules/
 
-# Logs y archivos temporales
+# Almacenes/cache de gestores de paquetes
+.pnpm-store/
+.npm/
+
+# Logs y temporales
 *.log
+logs/
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pids
@@ -11,13 +17,27 @@ pids
 *.seed
 *.pid.lock
 
-# Dependencias generadas por los paquetes
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Artefactos de build/reportes
+dist/
+build/
+coverage/
+.nyc_output/
+
+# Cache de herramientas
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# SO / Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Archivos de lock alternativos (el proyecto usa pnpm-lock.yaml)
 package-lock.json
 yarn.lock
-
-# Entorno
-.env
-.DS_Store
-
-# Configuración de Visual Studio Code
-.vscode/
