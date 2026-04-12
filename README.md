@@ -7,6 +7,7 @@ API simple en Node.js + Express para consultar productos desde un archivo JSON, 
 Este repositorio contiene:
 
 - Un servidor Express con endpoints para listar productos y consultar un producto por ID.
+- Endpoints para gestionar usuarios del laboratorio hands-on.
 - Un módulo de gestión de productos (`ProductManager`) con operaciones CRUD sobre archivos.
 - Un conjunto de laboratorios en la carpeta `hands-on-Labs` para practicar manejo de usuarios con persistencia en JSON.
 
@@ -100,12 +101,41 @@ Ejemplo:
 curl http://localhost:8080/products/2
 ```
 
+### GET /labs/users
+
+Devuelve todos los usuarios guardados en `hands-on-Labs/Usuarios.json`.
+
+Ejemplo:
+
+```bash
+curl http://localhost:8080/labs/users
+```
+
+### POST /labs/users
+
+Crea un usuario nuevo para el laboratorio.
+
+Campos obligatorios:
+
+- `Nombre`
+- `Apellido`
+- `Edad`
+- `Curso`
+
+Ejemplo:
+
+```bash
+curl -X POST http://localhost:8080/labs/users \
+  -H "Content-Type: application/json" \
+  -d '{"Nombre":"Ana","Apellido":"Pérez","Edad":22,"Curso":"Backend"}'
+```
+
 ## Estructura del Proyecto
 
 ```text
 .
 ├─ src/
-│  ├─ app.js                # Servidor Express y rutas /products
+│  ├─ app.js                # Servidor Express y rutas /products y /labs/users
 │  └─ product-manager.js    # Clase ProductManager (CRUD en archivo)
 ├─ hands-on-Labs/
 │  ├─ new-user.js           # Script de ejemplo para crear/consultar usuarios
